@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/Jabawack/test/issues"
   },
-  "homepage": "https://github.com/Jabawack/test#readme"
+  "homepage": "https://github.com/Jabawack/test#readme",
+  "dependencies": {
+    "pg": "^6.1.0",
+    "restify": "^4.1.1"
+  }
 }
