@@ -1,4 +1,4 @@
-ivar restify = require('restify');
+var restify = require('restify');
 var pg = require('pg');
 var port = process.env.PORT || 3000;
 
