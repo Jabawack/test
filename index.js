@@ -11,28 +11,16 @@ server.use(restify.CORS({
     credentials: true
 }));
 
-function authorize(req, res, next) {
+server.get('/db', function(req, res) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM users WHERE email=$1', [req.username], function(err, result) {
+    //client.query('SELECT * FROM users WHERE email=$1', [req.username], function(err, result) {
+    client.query('SELECT * FROM users', function(err, result) {
       done();
       if (err) {
-        return next(new restify.InternalServerError('Error querying your db'));
+          console.error(err); res.send("Error " + err);
+      } else {
+          res.render('pages/db', {results: result.rows} );
       }
-
-      if (result.rows.length < 1) {
-        return next(new restify.UnauthorizedError());
-      }
-
-      if (req.authorization.basic.password != result.rows[0]['password']) {
-        return next(new restify.UnauthorizedError());
-      }
-
-      req.authorization.user = {};
-      req.authorization.user.id = result.rows[0]['id'];
-      req.authorization.user.email = result.rows[0]['email'];
-      req.authorization.user.username = result.rows[0]['username'];
-
-      return next();
     });
   });
 }
