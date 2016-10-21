@@ -11,16 +11,16 @@ server.use(restify.CORS({
     credentials: true
 }));
 
-server.get('/db', function(req, res) {
+server.get('/db', function(req, res, next) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     //client.query('SELECT * FROM users WHERE email=$1', [req.username], function(err, result) {
     client.query('SELECT * FROM users', function(err, result) {
       done();
       if (err) {
-          console.error(err); res.send("Error " + err);
-      } else {
-          res.render('pages/db', {results: result.rows} );
+        return next(new restify.InternalServerError('Error querying your db'));
       }
+      res.send(result.rows);
+      return next();
     });
   });
 });
