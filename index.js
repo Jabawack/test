@@ -23,7 +23,7 @@ server.get('/db', function(req, res) {
       }
     });
   });
-}
+});
 
 server.get('/', function(req, res, next) {
 	res.send('hello');
