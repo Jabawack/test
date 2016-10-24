@@ -14,12 +14,12 @@ server.get('/db', function (req, res, next) {
     //client.query('SELECT * FROM users WHERE email=$1', [req.username], function(err, result) {
     //client.query('SELECT * FROM users WHERE uid=$1', req.params['uid'], function (err, result) {
     client.query('SELECT * FROM users', req.params['uid'], function (err, result) {
-      console.log(req.params.uid);
+      console.log(req.params.uID);
       done();
       if (err) {
         return next(new restify.InternalServerError('Error querying your db'));
       }
-      res.send(req.params.uid);
+      res.send(req.params.uID);
       res.send(result.rows);
       return next();
     });
@@ -29,14 +29,13 @@ server.get('/db/:uID', function (req, res, next) {
   pg.connect(process.env.DATABASE_URL, function (err, client, done) {
     //client.query('SELECT * FROM users WHERE email=$1', [req.username], function(err, result) {
     //client.query('SELECT * FROM users WHERE uid=$1', req.params['uid'], function (err, result) {
-    client.query('SELECT * FROM users where uid = ($1)', req.params.uID, function (err, result) {
-      console.log(req.params.uID);
+    client.query('SELECT * FROM users where uid = ($1)', [req.params.uID], function (err, result) {
+      console.log(result.rows[0]);
       done();
       if (err) {
         return next(new restify.InternalServerError('Error querying your db'));
       }
-      res.send(req.params.uID);
-      res.send(result.rows);
+      res.send(result.rows[0]);
       return next();
     });
   });
